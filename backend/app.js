@@ -7,12 +7,14 @@ const categoriesRoutes = require("./routes/categories");
 
 const app = express(); // this is the cause of the problem
 mongoose
-  .connect("mongodb+srv://gallerybackend:GdTWbbx9gQy2PD9k@cluster0.4jx0y.mongodb.net/category")
+  .connect(
+    "mongodb+srv://gallerybackend:GdTWbbx9gQy2PD9k@cluster0.4jx0y.mongodb.net/category"
+  )
   .then(() => {
     console.log("Connected to database");
   })
   .catch((err) => {
-      console.log(err)
+    console.log(err);
     console.log("Connection Failed");
   });
 

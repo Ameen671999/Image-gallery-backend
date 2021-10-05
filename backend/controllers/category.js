@@ -3,55 +3,57 @@ const Category = require("../models/category");
 exports.createCategory = (req, res, next) => {
   const category = new Category({
     categoryName: req.body.categoryName,
-    numberOfImages: req.body.numberOfImages
+    numberOfImages: req.body.numberOfImages,
   });
-  category.save().then((createCategory) => {
-    res.status(201).json({
-      message: "Category added successfully",
-      category: {
-        ...createCategory,
-        id: createCategory._id,
-      },
-    });
-  }).catch(error => {
-    res.status(500).json({
-      err:error,
-      message: "Creating category failed!"
+  category
+    .save()
+    .then((createCategory) => {
+      res.status(201).json({
+        message: "Category added successfully",
+        category: {
+          ...createCategory,
+          id: createCategory._id,
+        },
+      });
     })
-  });
-}
+    .catch((error) => {
+      res.status(500).json({
+        err: error,
+        message: "Creating category failed!",
+      });
+    });
+};
 
-exports.updateCategory =   (req, res, next) => {
+exports.updateCategory = (req, res, next) => {
   const category = new Category({
     _id: req.body.id,
     categoryName: req.body.categoryName,
-    numberOfImages: req.body.numberOfImages
+    numberOfImages: req.body.numberOfImages,
   });
-  console.log("put method")
-  console.log(category)
-  Category.updateOne(
-    { _id: req.params.id },
-    category
-  ).then((result) => {
-    console.log(result)
-    if (result.n > 0) {
-      res.status(200).json({
-        message: "Updated successfully",
-      });
-    } else {
-      res.status(401).json({
-        message: "Not Updated successfully",
-      });
-    }
-  }).catch(error => {
-    console.log(error)
-    res.status(500).json({
-      message: "Couldn't update the category!"
+  console.log("put method");
+  console.log(category);
+  Category.updateOne({ _id: req.params.id }, category)
+    .then((result) => {
+      console.log(result);
+      if (result.n > 0) {
+        res.status(200).json({
+          message: "Updated successfully",
+        });
+      } else {
+        res.status(401).json({
+          message: "Not Updated successfully",
+        });
+      }
     })
-  });
-}
+    .catch((error) => {
+      console.log(error);
+      res.status(500).json({
+        message: "Couldn't update the category!",
+      });
+    });
+};
 
-exports.getCategorys =  (req, res, next) => {
+exports.getCategorys = (req, res, next) => {
   const categoryQuery = Category.find();
   let fetchedCategorys;
   categoryQuery
@@ -65,30 +67,33 @@ exports.getCategorys =  (req, res, next) => {
         categorys: fetchedCategorys,
         maxCategorys: count,
       });
-    }).catch(error => {
+    })
+    .catch((error) => {
       res.status(500).json({
-        message: "Fetching categorys failed!"
-      })
+        message: "Fetching categorys failed!",
+      });
     });
-}
+};
 
 exports.getCategory = (req, res, next) => {
-  Category.findById(req.params.id).then((category) => {
-    if (category) {
-      res.status(200).json(category);
-    } else {
-      res.status(404).json({ message: "Category not found!" });
-    }
-  }).catch(error => {
-    res.status(500).json({
-      message: "Fetching category failed!"
+  Category.findById(req.params.id)
+    .then((category) => {
+      if (category) {
+        res.status(200).json(category);
+      } else {
+        res.status(404).json({ message: "Category not found!" });
+      }
     })
-  });
-}
+    .catch((error) => {
+      res.status(500).json({
+        message: "Fetching category failed!",
+      });
+    });
+};
 
 exports.deleteCategory = (req, res, next) => {
-  Category.deleteOne({ _id: req.params.id}).then(
-    (result) => {
+  Category.deleteOne({ _id: req.params.id })
+    .then((result) => {
       console.log(result);
       if (result.n > 0) {
         res.status(200).json({
@@ -99,10 +104,10 @@ exports.deleteCategory = (req, res, next) => {
           message: "Not Authorized",
         });
       }
-    }
-  ).catch(error => {
-    res.status(500).json({
-      message: "Deleting category failed!"
     })
-  });
-}
+    .catch((error) => {
+      res.status(500).json({
+        message: "Deleting category failed!",
+      });
+    });
+};
